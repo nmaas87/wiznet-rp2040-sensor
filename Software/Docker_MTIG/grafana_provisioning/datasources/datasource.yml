@@ -1,0 +1,15 @@
+apiVersion: 1
+datasources:
+  - name: InfluxDB_v2_Flux
+    type: influxdb
+    access: proxy
+    url: http://mtig-influxdb:8086
+    secureJsonData:
+      token: "Vqs6c5I6qIH5-gOEG3tphjdGjW_CHxUCbwuej4RdP4RPLMh-uHyR1dpdaha0QUwZxV1dbhTO3Vlz9VnwK8qWPA=="
+    jsonData:
+      version: Flux
+      organization: mtig
+      defaultBucket: mtig
+      tlsSkipVerify: true
+    isDefault: true
+    editable: true

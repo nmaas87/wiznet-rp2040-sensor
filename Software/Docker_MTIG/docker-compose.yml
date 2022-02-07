@@ -1,0 +1,52 @@
+version: "3.6"
+services:
+  mtig-mosquitto:
+    image: eclipse-mosquitto:2.0-openssl
+    container_name: mtig-mosquitto
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    networks:
+      - mtig
+    volumes:
+      - ./mosquitto_log:/mosquitto/log
+      - ./mosquitto_data:/mosquitto/data
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+  mtig-influxdb:
+    image: influxdb:2.0-alpine
+    container_name: mtig-influxdb
+    restart: always
+    ports:
+      - 8086:8086
+    networks:
+      - mtig
+    volumes:
+      - ./influxdb_data:/var/lib/influxdb2
+      - ./influxdb_config:/etc/influxdb2
+    env_file: configuration.env
+  mtig-telegraf:
+    image: telegraf:1.21-alpine
+    container_name: mtig-telegraf
+    restart: always
+    networks:
+      - mtig
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    env_file: configuration.env
+  mtig-grafana:
+    image: grafana/grafana-oss:8.3.4
+    container_name: mtig-grafana
+    restart: always
+    user: "472"
+    ports:
+      - 3000:3000
+    networks:
+      - mtig
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+      - ./grafana_provisioning/:/etc/grafana/provisioning
+    env_file: configuration.env
+networks:
+  mtig:
+
